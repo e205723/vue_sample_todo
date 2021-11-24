@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="list">
+  <div ref="list" class="list">
     <div v-for="todo in store.getters.toDoList" :key="todo.id">
       <div class="to-do">
         <div class="column">
@@ -51,7 +51,8 @@ import ToDo from '@/types/ToDo';
 
 export default defineComponent({
   name: 'ToDoList',
-  setup() {
+  emits: ['test'],
+  setup(_, context) {
     const store = useStore();
     const toDoTitle = ref<string>('');
     const doing = ref<boolean>(true);
@@ -78,6 +79,7 @@ export default defineComponent({
       } else if (done.value) {
         store.dispatch('getTitle', 'done');
       }
+      context.emit('test');
     };
     return {
       store, toDoTitle, doing, done, activateDoing, activateDone, addToDo,

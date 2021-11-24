@@ -1,7 +1,7 @@
 <template>
   <div class="todo">
     <Title />
-    <ToDoList />
+    <ToDoList @test="test" />
   </div>
 </template>
 
@@ -13,6 +13,13 @@ export default {
   name: 'ToDo',
   components: {
     Title, ToDoList,
+  },
+  methods: {
+    test() {
+      this.$nextTick(() => {
+        alert('Hello, World!');
+      });
+    },
   },
 };
 </script>
