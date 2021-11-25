@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="list">
+  <div ref="list" class="list">
     <div v-for="todo in store.getters.toDoList" :key="todo.id">
       <div class="to-do">
         <div class="column">
@@ -45,7 +45,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import {
+  defineComponent, ref, onUpdated, nextTick,
+} from 'vue';
 import { useStore } from 'vuex';
 import ToDo from '@/types/ToDo';
 
@@ -56,6 +58,8 @@ export default defineComponent({
     const toDoTitle = ref<string>('');
     const doing = ref<boolean>(true);
     const done = ref<boolean>(false);
+    const list = ref<HTMLImageElement>();
+
     const activateDoing = () => {
       doing.value = true;
       done.value = false;
@@ -79,8 +83,16 @@ export default defineComponent({
         store.dispatch('getTitle', 'done');
       }
     };
+
+    onUpdated(() => {
+      nextTick(() => {
+        if (!list.value) return;
+        list.value.scrollTop = list.value.scrollHeight;
+      });
+    });
+
     return {
-      store, toDoTitle, doing, done, activateDoing, activateDone, addToDo,
+      store, toDoTitle, doing, done, activateDoing, activateDone, addToDo, list,
     };
   },
 });
